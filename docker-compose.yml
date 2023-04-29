@@ -1,0 +1,33 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "4000:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+  node-app:
+    build: .
+    # ports:
+    #   - "4000:3000"
+    environment:
+      - PORT=3000
+    depends_on:
+      - mongoDB
+    # env_file:
+    #   - ./.env
+
+  mongoDB:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=kenule
+      - MONGO_INITDB_ROOT_PASSWORD=kenule500
+    volumes:
+      - mongo-db:/data/db
+
+  redis:
+    image: redis
+
+volumes:
+  mongo-db:
